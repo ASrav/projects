@@ -1,0 +1,83 @@
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <stdlib.h>
+
+#define NUM_THREADS 500
+
+const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+pthread_mutex_t mutex;
+FILE *f;
+
+static char *rand_string(char *str)
+{
+	int size = 100;
+	int n;
+	for (n = 0; n < size; n++) {
+		int key = rand() % 62;
+		str[n] = charset[key];
+	}
+	str[size] = '\0';
+	return str;
+}
+ 
+void *perform_work(void *argument)
+{
+	int passed_in_value,i;
+	passed_in_value = *((int *) argument);
+	printf("Hey... It's me, thread with argument %d !!!\n", passed_in_value);
+
+//	for(i=0 ;i<10;i++)
+	{
+		char str[120];
+
+		int j;
+					// locks are to be put here.....
+		pthread_mutex_lock(&mutex);
+
+ 		fprintf(f,"%d//",passed_in_value);
+		for(j=0;j<200;j++)
+		{
+			int key = rand() % 62;
+			fprintf(f,"%c",charset[rand()%62]);
+		}
+ 		fprintf(f,"\n");
+
+		pthread_mutex_unlock(&mutex);
+
+		//fprintf(f,"%d//%s ",passed_in_value,rand_string(str));
+	}
+	return NULL;
+}
+
+int main(void)
+{
+	f = fopen("output.txt","w");
+	fclose(f);			// just to clear the contents of the output.txt
+
+	f = fopen("output.txt","a");
+
+	pthread_t threads[NUM_THREADS];
+	int thread_args[NUM_THREADS];
+	int result_code, index;
+
+	// creating threads one by one
+	for (index = 0; index < NUM_THREADS; ++index) 
+	{
+		thread_args[index] = index;
+		printf("In main: creating thread %d\n", index);
+		result_code = pthread_create(&threads[index], NULL, perform_work, (void *) &thread_args[index]);
+		assert(0 == result_code);
+	}
+
+	// wait for each thread to complete
+	for (index = 0; index < NUM_THREADS; ++index) {
+		// block until thread 'index' completes
+		result_code = pthread_join(threads[index], NULL);
+		printf("In main: thread %d has completed\n", index);
+		assert(0 == result_code);
+	}
+	printf("In main: All threads completed successfully\n");
+	exit(EXIT_SUCCESS);
+}
