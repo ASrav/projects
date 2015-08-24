@@ -1,0 +1,162 @@
+#include<iostream>
+#include<string.h>
+#include<stdlib.h>
+using namespace std;
+class NODE
+{
+public:
+	char *data;
+	NODE *next;
+public:
+	NODE(char *val="\0",NODE *link=NULL)
+	{
+		data=new char[20];
+		strcpy(data,val);
+		next=link;
+	}
+	NODE *init()
+	{
+		return NULL;
+	}
+	NODE *insertTail(char *val)
+	{	
+		NODE *temp=this;
+		if(!temp) return new NODE(val,NULL);
+		while(temp->next)
+		{
+			temp=temp->next;
+		}
+		temp->next=new NODE(val,NULL);
+		return this;
+	}
+	bool del()
+	{
+		NODE *temp=this;
+		if(!this) return 0;
+		while((temp->next)->next!=NULL)
+		{
+			temp=temp->next;
+		}
+		temp->next=NULL;
+		return 1;
+	}
+	void printList()
+	{
+		//cout<<this->data<<'\n';
+		NODE *temp=this->next;
+		while(temp)
+		{
+			cout<<' '<<temp->data;
+			temp=temp->next;
+		}
+	}
+};
+class STACK:public NODE
+{
+	NODE *top;
+public:
+	STACK()
+	{
+		top=new NODE;
+	}
+	bool push(char *val)
+	{
+		NODE *t=new NODE(val,top);
+		if(t==NULL) 
+			return 0;
+		top=t;
+		return 1;
+	}
+	bool pop()
+	{
+		if(isEmpty())
+			return 0;
+		top=top->next;
+	}
+	char *Top()
+	{
+		return top->data;
+	}
+	bool isEmpty()
+	{
+		if(top->next==NULL)
+			return 1;
+		else
+			return 0;
+	}
+};
+int main()
+{
+	system("clear");cout<<' ';
+	STACK s,sk;int i=0,n=0,m=0;
+	NODE *a;
+	a=new NODE;
+	char *str; 
+	str=new char[20];
+	cin>>str;
+	char *ch; 
+	ch=new char[20];
+	char *ch1; 
+	ch1=new char[20];
+	while(strcmp(str,"#")!=0)
+	{
+		if((strcmp(str,"z")==0)&&(!s.isEmpty()))
+		{
+			if((i==0)||(m>=n))
+			{
+				s.pop();
+				a->del();
+				system("clear");
+				a->printList();
+				cin>>str;
+			}
+			else
+			{
+				ch=s.Top();
+				ch1=sk.Top();
+				if(ch[0]==ch1[0])
+				{
+					s.pop();		
+					a->del();
+				}
+				ch=sk.Top();sk.pop();
+				s.push(ch);
+				a->insertTail(ch);
+				system("clear");
+				a->printList();m++;
+				cin>>str;
+			}	
+		}
+		else if((strcmp(str,"b")==0)&&(!s.isEmpty()))
+		{
+			ch=s.Top();s.pop();
+			sk.push(ch);
+			ch[strlen(ch)-1]='\0';
+			a->del();
+			if(strcmp(ch,"\0")!=0)
+			{
+				s.push(ch);
+				a->insertTail(ch);
+			}
+			system("clear");
+			a->printList();
+			i=1;n++;m=0;
+			cin>>str;
+		}
+		else
+		{
+			if((strcmp(str,"b")!=0)&&(strcmp(str,"z")!=0))
+			{
+				s.push(str);i=0;n=0;
+				a->insertTail(str);
+				cin>>str;
+			}
+			else
+			{
+				system("clear");
+				cin>>str;
+			}
+		}
+	}
+	return 1;
+}
