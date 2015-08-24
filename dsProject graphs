@@ -1,0 +1,510 @@
+#include<iostream>
+#include<string.h>
+int nos=152;
+int nos1=50;
+using namespace std;
+typedef struct st
+{
+	int sid;
+	char sname[30];
+	int aid;int bid;int doorNo;char landmark[50];
+}street;
+street s[50]={	{0,"",100,0,0,'\0'},
+		{1,"gomathi_street",101,0,0,'\0'},
+		{2,"nehru_street",101,0,0,'\0'},
+		{3,"gandhi_street",101,201,34,"near_GangaStationary"},
+		{4,"iswarya_street",101,204,23,'\0'},
+		{5,"lakshmipuram",101,0,0,'\0'},
+		{6,"mgr_street",106,205,76,"oppTo_PizzaHut"},
+		{7,"periyar_street",106,0,0,'\0'},
+		{8,"thiruvalluvar_street",106,208,56,"near_OliveHighSchool"},
+		{9,"jeeva_street",106,0,0,'\0'},
+		{10,"veeramani_street",101,201,21,"\0"},
+		{11,"manikandan_street",101,0,0,'\0'},
+		{12,"gst_road",101,202,400,"adjTo_VettriTheatre"},
+		{13,"balaji_street",102,206,73,"\0"},
+		{14,"indira_street",104,0,0,'\0'},
+		{15,"vigneshwar_street",102,206,90,"nextTo_EllaiAmmanTemple"},
+		{16,"annadurai_street",102,0,0,"\0"},
+		{17,"kesari_street",102,203,32,"oppTo_VishnuTemple"},
+		{18,"mehta_street",102,207,92,"adjTo_Gangotri"},
+		{19,"subramaniam_street",102,204,75,"\0"},
+		{20,"leelavathi_street",102,0,0,'\0'},
+		{21,"dharmarajapuram_street",104,208,28,"\0"},
+		{22,"ponniamman_street",105,201,24,"near_PonniAmmanTemple"},
+		{23,"kantaroopan_street",105,0,0,'\0'},
+		{24,"thirumal_street",105,207,87,"\0"},
+		{25,"vasanthapuri_layout",105,202,47,"nextTo_GSHospital"},
+		{26,"thilagam_street",105,0,0,'\0'},
+		{27,"ganga_street",104,0,0,'\0'},
+		{28,"aandavar_street",104,205,48,"adjTo_busDepot"},
+		{29,"arcot_road",103,203,29,"oppTo_nilgiris"},
+		{30,"vivekananda_street",103,202,38,"\0"},
+		{31,"seetharaman_street",103,0,0,'\0'},
+		{32,"pallavan_street",103,204,32,"\0"},
+		{33,"thirumal_street",103,205,85,"near_BalajiBhavan"},
+		{34,"anbu_street",103,0,0,'\0'},
+		{35,"kaidiamman_street",103,207,94,"\0"},
+		{36,"srinivasa_street",103,0,0,"\0"},
+		{37,"arunachalam_street",103,0,0,'\0'},
+		{38,"saraswathi_street",103,206,40,"\0"},
+		{39,"porur_main_road",103,208,39,"oppTo_BuhariRestaurant"},
+		{40,"rajivgandhi_street",107,201,95,"nextTo_SaravanaBhavan"},
+		{41,"puthagaram_colony",107,205,34,"\0"},
+		{42,"tvs_street",107,0,0,'\0'},
+		{43,"sidco_street",107,0,0,'\0'},
+		{44,"rajaji_street",107,204,60,"near_GH"},
+		{45,"olympic_street",107,202,89,"oppTo_CorporationGround"},
+		{46,"kamaraj_street",107,206,72,"\0"},
+		{47,"kannan_street",107,0,0,'\0'},
+		{48,"madurai_mannavan_street",107,0,0,'\0'},
+		{49,"koyambedu_main_road",107,203,39,"adjTo_BusStand"}};
+typedef struct ar
+{
+	int aid;
+	int pin;
+	char aname[20];
+}area;
+area a[8]={	{0,0,""},
+		{101,44,"chromepet"},
+		{102,27,"minambakkam"},
+		{103,116,"porur"},
+		{104,97,"ekkaduthangal"},
+		{105,56,"poonamallee"},
+		{106,43,"pallavaram"},
+		{107,107,"koyambedu"}};
+typedef struct bank
+{
+	int bid;
+	char bname[20];
+}bank;
+bank b[9]={	{0,""},
+		{201,"hdfc"},
+		{202,"icici"},
+		{203,"indian_bank"},
+		{204,"iob"},
+		{205,"cub"},
+		{206,"kvb"},
+		{207,"hsbc"},
+		{208,"syndicate_bank"}};
+void toAddress(int sid)
+{
+	int aid=s[sid].aid;int bid=s[sid].bid;
+	cout<<"\nAddress: \n";
+	cout<<s[sid].doorNo<<','<<b[bid-200].bname<<",\n";
+	if(strcmp(s[sid].landmark,"\0"))
+		cout<<s[sid].landmark<<",\n";
+	cout<<s[sid].sname<<",\n"<<a[aid-100].aname<<",\n"<<"chennai-"<<a[aid-100].pin<<endl<<endl;
+}
+int toBid(char bank[])
+{
+	for(int i=1;i<9;i++)
+	{
+		if(!strcmp(b[i].bname,bank))
+			return b[i].bid;
+	}
+	return 0;
+}	
+int toId(char street[])
+{
+	for(int i=1;i<nos1;i++)
+	{
+		if(!strcmp(s[i].sname,street))
+			return s[i].sid;
+	}
+	return 0;
+}
+class NODE
+{
+	int sid;
+	int aid;
+	NODE *next;
+public:
+	NODE(int s=0,int a=0,NODE *link=NULL)
+	{
+		next=link;
+		sid=s;
+		aid=a;
+	}
+	NODE *insert(int s,int a)
+	{
+		this->next=new NODE(s,a,this->next);
+		return this;
+	}
+	void print()
+	{
+		NODE *temp=this->next;
+		cout<<"v["<<this->sid<<","<<this->aid<<"]:  ";
+		while(temp)
+		{
+			cout<<'('<<temp->sid<<","<<temp->aid<<")  "; temp=temp->next;
+		}
+	cout<<"\n";
+	}
+	friend class GRAPH;
+};
+class TREE
+{
+	int sid;int bid;
+	TREE *left;
+	TREE *right;
+public:
+	TREE(int s1=0,TREE *l=NULL,TREE *r=NULL)
+	{
+		sid=s1;
+		bid=s[sid].bid;
+		left=l;
+		right=r;
+	}
+	friend TREE* insertVal(TREE *t,int s)
+        {
+                if(t==NULL) return new TREE(s,NULL,NULL);
+                if(s<t->sid) t->left=insertVal(t->left,s);
+                if(s>t->sid) t->right=insertVal(t->right,s);
+                return t;
+        }
+	friend int search(TREE *t,int val)
+        {
+                if(!t) return 0;
+                if(t->sid==val) {toAddress(t->sid);return 1;}
+                if(t->sid>val) return search(t->left,val);
+                return search(t->right,val);
+        }
+        friend int searchAtm(TREE *t,int val)
+        {
+        	if(!t) return 0;
+        	if(t->bid==val)
+        	{
+        		toAddress(t->sid);
+        		return 1;
+        	}
+	       	return searchAtm(t->left,val) + searchAtm(t->right,val);
+        }
+};
+class GRAPH
+{
+	NODE **t;	
+	int n;	
+public:
+	GRAPH(int N)
+	{
+		n=N;
+		t=new NODE*[n];
+		for(int i=1;i<n;i++)
+			t[i]=new NODE(s[i].sid,s[i].aid,NULL);
+	}
+	void creategraph(int g[][3])
+	{
+		for(int i=1;i<nos;i++)
+			t[g[i][0]]=t[g[i][0]]->insert(s[g[i][1]].sid,s[g[i][1]].aid);
+	}
+	int minimum(int a,int b)
+        {
+                return (a<b)?a:b;
+        }
+	int shortestPath(int g[][3],int source)
+        {
+        	int *MARK;
+        	MARK=new int[n];
+                int *dist; dist=new int[n];
+                for(int i=1;i<n;i++)
+                	dist[i]=9999;
+                for(int i=1;i<nos;i++)
+                	if(g[i][0]==source)
+				dist[g[i][1]]=g[i][2];
+                for(int i=1;i<n;i++)
+                        MARK[i]=0;
+                MARK[source]=1;
+                int finale;
+                int l=1,b=0,i=0,a=0,c=0;
+                int min=9999,path=9999;
+                dist[source]=9999;
+                while(l<=n)
+                {
+                        for(int i=1;i<nos;i++)
+                        {
+				if((MARK[g[i][0]]) && (g[i][2]<min))
+					if(!MARK[g[i][1]])
+	                                {
+                                               	min=g[i][2];
+                                               	a=g[i][0];b=g[i][1];c=i;
+                                        }
+                        }
+                        MARK[b]=1;l++;min=9999;
+                        dist[b]=minimum(dist[b],dist[a]+g[c][2]);
+                }
+  		for(int i=1;i<n;i++)
+		{
+                       if((dist[i]<path)&&(s[i].bid!=0))
+                       { 
+                              path=dist[i];
+                              finale=i;
+                        }
+                 }
+                 return finale;
+        }
+	void displaygraph()
+	{
+		for(int i=1;i<n;i++)
+			t[i]->print();
+	}
+};
+
+int main()
+{
+	int mygraph[152][3]={  
+				{50,50,151},
+				{1,2,2},
+				{1,12,3},
+				{2,1,2},
+				{2,3,4},
+				{2,4,3},
+				{2,5,5},
+				{3,2,1},
+				{3,5,1},
+				{4,2,1},
+				{4,5,1},
+				{4,11,1},
+				{5,2,5},
+				{5,3,4},
+				{5,4,4},
+				{5,6,3},
+				{6,5,1},
+				{6,7,1},
+				{6,16,1},
+				{6,18,1},
+				{7,6,4},
+				{7,8,3},
+				{8,7,1},	
+				{8,9,1},
+				{8,10,1},	
+				{9,8,2},
+				{9,10,5},
+				{9,12,4},
+				{10,8,1},
+				{10,9,1},
+				{10,11,1},
+				{10,12,1},
+				{11,4,4,},
+				{11,10,2},
+				{11,12,3},			
+				{12,1,1},
+				{12,9,1},
+				{12,10,1},
+				{12,11,1},
+				{12,13,1},	
+				{13,12,1},
+				{13,15,1},
+				{14,15,3},
+				{14,21,2},
+				{15,13,1},
+				{15,14,1},
+				{15,16,1},	
+				{16,6,7},
+				{16,15,3},
+				{16,17,1},
+				{16,18,6},
+				{16,20,1},
+				{17,16,1},
+				{17,18,1},
+				{17,20,1},
+				{18,6,1},
+				{18,17,1},
+				{18,19,1},
+				{18,26,1},
+				{19,18,1},
+				{19,26,1},		
+				{20,16,1},
+				{20,17,5},
+				{20,21,4},
+				{21,14,1},
+				{21,20,1},
+				{21,28,1},
+				{22,23,1},
+				{22,25,1},
+				{22,26,1},
+				{22,27,1},
+				{23,22,2},
+				{23,24,1},
+				{23,25,2},
+				{23,26,3},
+				{24,23,1},
+				{24,25,1},
+				{25,22,1},
+				{25,23,1},
+				{25,24,1},
+				{25,26,1},
+				{26,22,2},
+				{26,23,3},
+				{26,25,2},
+				{27,22,1},
+				{27,28,2},
+				{28,21,1},
+				{28,27,1},
+				{28,29,1},
+				{29,28,1},
+				{29,30,1},
+				{29,32,1},
+				{29,49,1},
+				{30,29,1},
+				{30,31,1},
+				{30,32,1},
+				{31,30,4},
+				{31,34,7},
+				{32,29,1},
+				{32,30,1},
+				{32,34,1},
+				{32,49,1},
+				{33,34,1},
+				{33,35,1},
+				{34,31,7},
+				{34,32,1},
+				{34,33,3},
+				{34,35,4},
+				{35,33,1},
+				{35,34,1},
+				{35,36,1},
+				{35,37,1},
+				{36,35,2},	
+				{36,38,4},
+				{37,35,5},
+				{37,38,3},
+				{37,39,6},
+				{38,36,1},
+				{38,37,1},
+				{38,39,1},
+				{39,37,1},
+				{39,38,1},
+				{39,40,1},
+				{39,45,1},
+				{40,39,1},
+				{40,41,1},
+				{41,40,1},
+				{41,42,1},
+				{41,48,1},
+				{42,41,1},
+				{42,43,1},
+				{42,44,2},
+				{43,42,1},
+				{43,44,5},
+				{43,46,5},
+				{44,42,1},
+				{44,43,1},
+				{44,47,1},
+				{44,48,1},
+				{45,39,1},
+				{45,46,1},
+				{46,43,1},
+				{46,45,1},
+				{46,47,1},
+				{46,49,1},
+				{47,44,2},
+				{47,46,4},
+				{48,41,2},
+				{48,44,3},
+				{49,29,1},
+				{49,32,1},
+				{49,46,1}};		
+	GRAPH g(50);
+	g.creategraph(mygraph);
+	g.displaygraph();
+	TREE *chrom=NULL,*mina=NULL,*pall=NULL,*porur=NULL,*ekkad=NULL,*poon=NULL,*koyam=NULL;	
+	chrom=insertVal(chrom,3);
+	chrom=insertVal(chrom,4);
+	chrom=insertVal(chrom,10);
+	chrom=insertVal(chrom,12);
+	mina=insertVal(mina,13);
+	mina=insertVal(mina,15);
+	mina=insertVal(mina,17);
+	mina=insertVal(mina,18);
+	mina=insertVal(mina,19);
+	pall=insertVal(pall,6);
+	pall=insertVal(pall,8);
+	ekkad=insertVal(ekkad,21);
+	ekkad=insertVal(ekkad,28);
+	poon=insertVal(poon,22);
+	poon=insertVal(poon,24);
+	poon=insertVal(poon,25);
+	porur=insertVal(porur,29);
+	porur=insertVal(porur,30);
+	porur=insertVal(porur,32);
+	porur=insertVal(porur,33);
+	porur=insertVal(porur,35);
+	porur=insertVal(porur,38);
+	porur=insertVal(porur,39);
+	koyam=insertVal(koyam,41);
+	koyam=insertVal(koyam,40);	
+	koyam=insertVal(koyam,44);
+	koyam=insertVal(koyam,45);
+	koyam=insertVal(koyam,46);
+	koyam=insertVal(koyam,49);
+	cout<<"\n1.Search for a particular atm 2.Search for the nearest atm\n";
+	int choice;
+	cin>>choice;
+	switch(choice)
+	{
+		case 1:
+		{
+			char str[20];
+			cout<<"Enter name of the bank: ";
+			cin>>str;
+			int id=toBid(str),a;
+			if(!id)
+				cout<<"\nNot in database\n\n";
+			a=searchAtm(chrom,id);
+			a=searchAtm(pall,id);	
+			a=searchAtm(koyam,id);
+			a=searchAtm(mina,id);
+			a=searchAtm(porur,id);
+			a=searchAtm(ekkad,id);
+			a=searchAtm(poon,id);
+			break;
+		}
+		case 2:
+		{
+			loop:
+			cout<<"\nEnter your area and street: ";
+			char ar[20],st[20];
+			cin>>ar>>st;
+			int id=toId(st);int check;
+			if(!id)
+			{
+				cout<<"\nWrong street name...\nContinue?? (y/n)";
+				char y;
+				cin>>y;
+				if(y=='y')
+					goto loop;
+			}
+			l1:
+			if(!strcmp(ar,"chromepet"))
+				check=search(chrom,id);
+			else if(!strcmp(ar,"poonamallee"))
+				check=search(poon,id);
+			else if(!strcmp(ar,"pallavaram"))
+				check=search(pall,id);
+			else if(!strcmp(ar,"minambakkam"))
+				check=search(mina,id);
+			else if(!strcmp(ar,"porur"))
+				check=search(porur,id);
+			else if(!strcmp(ar,"ekkaduthangal"))
+				check=search(ekkad,id);
+			else if(!strcmp(ar,"koyambedu"))
+				check=search(koyam,id);
+			else
+			{	
+				cout<<"\nnot in database\n";
+				goto l2;
+			}
+			if(!check)
+			{	
+				id=g.shortestPath(mygraph,id);
+				int aid=s[id].aid;
+				strcpy(ar,a[aid-100].aname);
+				goto l1;
+			}	
+			l2:
+				cout<<endl;
+		}
+	}
+	return 1;	
+}
